@@ -5,6 +5,7 @@
 #include <ESP8266WiFi.h>
 #endif
 #include <Firebase_ESP_Client.h>
+#include <CTBot.h>
 
 // Provide the token generation process info.
 #include "addons/TokenHelper.h"
@@ -19,9 +20,14 @@ FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
 
+CTBot myBot;
+char telegramToken[] = "6835531911:AAFxesGv9slnnNaX75ifTitL_0i-CcpTDqg";
+
 unsigned long sendDataPrevMillis = 0;
 int count = 0;
 bool signupOK = false;
+
+int Boton = A0;
 
 void setup()
 {
@@ -42,6 +48,15 @@ void setup()
   Serial.print("Connected with IP: ");
   Serial.println(WiFi.localIP());
   Serial.println();
+
+  // Inicializar CTBot con las credenciales WiFi
+  myBot.wifiConnect(WIFI_SSID, WIFI_PASSWORD);
+  myBot.setTelegramToken(telegramToken);
+
+  if (myBot.testConnection())
+    Serial.println("\nConnection OK");
+  else
+    Serial.println("\nConnection ERROR!!");
 
   /* Assign the api key (required) */
   config.api_key = API_KEY;
